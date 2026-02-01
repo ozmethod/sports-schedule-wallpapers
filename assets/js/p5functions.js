@@ -288,47 +288,53 @@ const sketch = (p) => {
         // in that specific scenario to avoid overlapping.
         if (date.getMonth() === 1 && p.daysInMonth(date.getMonth(), date.getFullYear()) === 28 && dayOfWeek_firstDay === 0) {
             offsetY += (WallpaperData.dateBlock.height + WallpaperData.dateBlock.offset.y);
-            // Recompute timezone offset anchor after moving the box down
-            //offsetY_TimeZone = offsetY + WallpaperData.month.home_away.size.height / 2;
-            offsetY_TimeZone += (WallpaperData.dateBlock.height + WallpaperData.dateBlock.offset.y)
+            // offsetY_TimeZone will be recomputed below relative to final offsetY
         }
+    }
 
-        let x_home = p.getScaled(WallpaperData.dateBlock.position.x + offsetX);
-        let x_away = p.getScaled(WallpaperData.dateBlock.position.x + offsetX + (WallpaperData.dateBlock.width - WallpaperData.month.home_away.size.width));
-        let y = p.getScaled(WallpaperData.dateBlock.position.y + offsetY);
+    let x_home = p.getScaled(WallpaperData.dateBlock.position.x + offsetX);
+    let x_away = p.getScaled(WallpaperData.dateBlock.position.x + offsetX + (WallpaperData.dateBlock.width - WallpaperData.month.home_away.size.width));
+    let y = p.getScaled(WallpaperData.dateBlock.position.y + offsetY);
 
-        graphics.fill('rgba(255, 255, 255, ' + WallpaperData.dateBlock.opacity.home + ')');
-        graphics.rect(x_home, y, p.getScaled(WallpaperData.month.home_away.size.width), p.getScaled(WallpaperData.month.home_away.size.height));
+    graphics.fill('rgba(255, 255, 255, ' + WallpaperData.dateBlock.opacity.home + ')');
+    graphics.rect(x_home, y, p.getScaled(WallpaperData.month.home_away.size.width), p.getScaled(WallpaperData.month.home_away.size.height));
 
-        graphics.fill('rgba(255, 255, 255, ' + WallpaperData.dateBlock.opacity.away + ')');
-        graphics.rect(x_away, y, p.getScaled(WallpaperData.month.home_away.size.width), p.getScaled(WallpaperData.month.home_away.size.height));
+    graphics.fill('rgba(255, 255, 255, ' + WallpaperData.dateBlock.opacity.away + ')');
+    graphics.rect(x_away, y, p.getScaled(WallpaperData.month.home_away.size.width), p.getScaled(WallpaperData.month.home_away.size.height));
 
-        let x_homeText = x_home + p.getScaled(WallpaperData.month.home_away.size.width / 2);
-        let x_awayText = x_away + p.getScaled((WallpaperData.month.home_away.size.width / 2) - 4);
-        let y_text = y + p.getScaled(WallpaperData.month.home_away.size.height / 2);
+    let x_homeText = x_home + p.getScaled(WallpaperData.month.home_away.size.width / 2);
+    let x_awayText = x_away + p.getScaled((WallpaperData.month.home_away.size.width / 2) - 4);
+    let y_text = y + p.getScaled(WallpaperData.month.home_away.size.height / 2);
+
+    graphics.textAlign(p.CENTER, p.CENTER);
+    graphics.fill('white');
+    graphics.textFont(jerseyFont, p.getScaled(WallpaperData.month.home_away.fontSize));
+    graphics.text("HOME", x_homeText, y_text);
+    graphics.text("AWAY", x_awayText, y_text);
+
+    if (timeZone) {
+        // Compute timezone rectangle Y so it sits above the HOME/AWAY box and doesn't overlap the HOME/AWAY text.
+        // Use the already computed 'y' (scaled) for the home/away box, then place the timezone box above it.
+        let y_home_scaled = y;
+        let timezoneRectHeight_scaled = p.getScaled(WallpaperData.month.home_away.size.height / 2);
+        let padding_scaled = p.getScaled(4); // small gap between timezone rect and home/away box
+
+        // Place timezone rect above the home/away box
+        let y_timezone = y_home_scaled - timezoneRectHeight_scaled - padding_scaled;
+
+        graphics.noFill()
+        graphics.strokeWeight(1)
+        graphics.stroke('rgba(255, 255, 255, ' + WallpaperData.month.text.opacity + ')')
+        graphics.rect(x_home, y_timezone, p.getScaled(WallpaperData.dateBlock.width), timezoneRectHeight_scaled);
+        graphics.noStroke()
+
+        let x_text = x_home + p.getScaled(WallpaperData.dateBlock.width / 2);
+        let y_text_tz = y_timezone + (timezoneRectHeight_scaled / 2) - p.getScaled(2);
 
         graphics.textAlign(p.CENTER, p.CENTER);
-        graphics.fill('white');
+        graphics.fill('rgba(255, 255, 255, ' + WallpaperData.month.text.opacity + ')');
         graphics.textFont(jerseyFont, p.getScaled(WallpaperData.month.home_away.fontSize));
-        graphics.text("HOME", x_homeText, y_text);
-        graphics.text("AWAY", x_awayText, y_text);
-
-        if (timeZone) {
-            y = p.getScaled(WallpaperData.dateBlock.position.y + offsetY_TimeZone);
-
-            graphics.noFill()
-            graphics.strokeWeight(1)
-            graphics.stroke('rgba(255, 255, 255, ' + WallpaperData.month.text.opacity + ')')
-            graphics.rect(x_home, y, p.getScaled(WallpaperData.dateBlock.width), p.getScaled(WallpaperData.month.home_away.size.height / 2));
-            graphics.noStroke()
-
-            let x_text = x_home + p.getScaled(WallpaperData.dateBlock.width / 2);
-            let y_text = y + p.getScaled(WallpaperData.month.home_away.size.height / 4) - 2;
-
-            graphics.textAlign(p.CENTER, p.CENTER);
-            graphics.fill('rgba(255, 255, 255, ' + WallpaperData.month.text.opacity + ')');
-            graphics.textFont(jerseyFont, p.getScaled(WallpaperData.month.home_away.fontSize));
-            graphics.text(timeZone, x_text, y_text);
+        graphics.text(timeZone, x_text, y_text_tz);
         }
     }
 
