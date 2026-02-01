@@ -280,6 +280,16 @@ const sketch = (p) => {
             offsetY = (WallpaperData.dateBlock.height + WallpaperData.dateBlock.offset.y) * (weekOfMonth - 1)
             offsetY_TimeZone = offsetY + WallpaperData.month.home_away.size.height / 2;
             offsetY += WallpaperData.dateBlock.height - WallpaperData.month.home_away.size.height
+        }      
+        
+        // Special case:
+        // If the month is February with exactly 28 days and the 1st is on a Sunday,
+        // the home/away box can overlap the 28th day. Move the box down one row
+        // in that specific scenario to avoid overlapping.
+        if (date.getMonth() === 1 && p.daysInMonth(date.getMonth(), date.getFullYear()) === 28 && dayOfWeek_firstDay === 0) {
+            offsetY += (WallpaperData.dateBlock.height + WallpaperData.dateBlock.offset.y);
+            // Recompute timezone offset anchor after moving the box down
+            offsetY_TimeZone = offsetY + WallpaperData.month.home_away.size.height / 2;
         }
 
         let x_home = p.getScaled(WallpaperData.dateBlock.position.x + offsetX);
