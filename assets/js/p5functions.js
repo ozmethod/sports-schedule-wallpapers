@@ -289,7 +289,8 @@ const sketch = (p) => {
         if (date.getMonth() === 1 && p.daysInMonth(date.getMonth(), date.getFullYear()) === 28 && dayOfWeek_firstDay === 0) {
             offsetY += (WallpaperData.dateBlock.height + WallpaperData.dateBlock.offset.y);
             // Recompute timezone offset anchor after moving the box down
-            offsetY_TimeZone = offsetY + WallpaperData.month.home_away.size.height / 2;
+            //offsetY_TimeZone = offsetY + WallpaperData.month.home_away.size.height / 2;
+            offsetY_TimeZone += (WallpaperData.dateBlock.height + WallpaperData.dateBlock.offset.y)
         }
 
         let x_home = p.getScaled(WallpaperData.dateBlock.position.x + offsetX);
