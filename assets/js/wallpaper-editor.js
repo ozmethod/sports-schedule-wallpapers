@@ -406,7 +406,8 @@ function BuildSchedule(scheduleArr = null) {
                     currScheduleObj.home = (currGame.teams.home.team.id == selectedTeam.id);
                     opponent = (currScheduleObj.home ?
                         currGame.teams.away.team :
-                        currGame.teams.home.team);
+                        currGame.teams.home.team);                    
+                    if (opponent && opponent.id > 200) { opponent = selectedLeague.teams.find(team => team.id == 1000); }
                     break;
                 case 2: //NHL
                     currScheduleObj.home = (currGame.homeTeam.id == selectedTeam.id);
