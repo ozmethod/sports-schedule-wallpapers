@@ -457,6 +457,34 @@
                 "Alternate Navy": "#0A2351",
                 "Gold": "#B6922E"
             }
+        },
+        {
+            "id": 784,
+            "active": true,
+            "name": "Canada",
+            "abbreviation": "CAN",
+            "logos": {
+                "Main": "Main.png",
+                "Primary": "Primary.png"
+            },
+            "colours": {
+                "Red": "#FF0000",
+                "White": "#000000"
+            }
+        },
+        {
+            "id": 1000,
+            "active": true,
+            "name": "NAN",
+            "abbreviation": "NAN",
+            "logos": {
+                "Main": "Main.png",
+                "Primary": "Primary.png"
+            },
+            "colours": {
+                "Red": "#FF0000",
+                "White": "#000000"
+            }
         }
     ]
 }

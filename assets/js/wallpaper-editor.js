@@ -419,6 +419,8 @@ function BuildSchedule(scheduleArr = null) {
 
             let opponentObj = selectedLeague.teams.find(team => team.id == opponent.id);
 
+            if (!opponentObj) { let opponentObj = selectedLeague.teams.find(team => team.id == 1000)  }
+            
             currScheduleObj.opponent = {
                 id: opponentObj.id,
                 abbreviation: opponentObj.abbreviation,
