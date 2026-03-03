@@ -407,7 +407,10 @@ function BuildSchedule(scheduleArr = null) {
                     opponent = (currScheduleObj.home ?
                         currGame.teams.away.team :
                         currGame.teams.home.team);                    
-                    if (opponent && opponent.id > 200) { opponent = selectedLeague.teams.find(team => team.id == 1000); }
+                    // if the opponent isn't found in our local team list, fall back to the placeholder (id 1000)
+                    if (opponent && !selectedLeague.teams.find(team => team.id == opponent.id)) {
+                        opponent = selectedLeague.teams.find(team => team.id == 1000);
+                    }
                     break;
                 case 2: //NHL
                     currScheduleObj.home = (currGame.homeTeam.id == selectedTeam.id);
